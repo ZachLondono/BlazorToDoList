@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "WjWd510RJBlv2A8BDZsUhF7vvWC2CdcUFAkPfB+q0RlKIWqGgVJBuF3qENe2PLbIq51MLsVzlR40164zpG/szw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Zachary Londono\\source\\repos\\ToDoApp\\ToDoApp\\ToDoApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\mediatr\\10.0.1\\mediatr.10.0.1.nupkg.sha512",
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\mediatr.contracts\\1.0.1\\mediatr.contracts.1.0.1.nupkg.sha512",
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\mediatr.extensions.microsoft.dependencyinjection\\10.0.1\\mediatr.extensions.microsoft.dependencyinjection.10.0.1.nupkg.sha512",
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.1\\microsoft.extensions.logging.abstractions.6.0.1.nupkg.sha512",
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\npgsql\\7.0.0-preview.6\\npgsql.7.0.0-preview.6.nupkg.sha512",
+    "C:\\Users\\Zachary Londono\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

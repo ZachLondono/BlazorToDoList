@@ -1,0 +1,66 @@
+﻿@page "/"
+@using ToDoApp.Editor
+@using ToDoApp.Manage.Commands
+@using ToDoApp.Manage.Data
+@using ToDoApp.Manage.Queries
+@inject ISender _sender
+@inject NavigationManager _navManager
+
+<h3>Manage Lists</h3>
+
+@if (Lists is null) {
+    <p>Loading...</p>
+} else {
+ 
+    <div class="container">
+        @foreach (var list in Lists) {
+            <div class="todo_list">
+                <span @onclick="() => OpenEditor(list.Id)">@list.Name</span>
+                <button @onclick="() => RemoveList(list)">x</button>
+            </div>
+        }
+    </div>
+
+    <button @onclick="CreateNewList">+ New List</button>
+
+}
+
+<style>
+
+    .container {
+        display:flex;
+    }
+
+    .todo_list {
+        margin:10px;
+        padding:10px;
+        border:1px solid black;
+    }
+
+</style>
+
+@code {
+
+    public List<ToDoListData>? Lists { get; set; } = null;
+
+    protected override async Task OnInitializedAsync() {
+        Lists = new(await _sender.Send(new GetToDoLists.Query()));
+    }
+
+    public async Task CreateNewList() {
+        if (Lists is null) return;
+        var newList = await _sender.Send(new CreateToDoList.Command("New To-Do List"));
+        Lists.Add(newList);
+    }
+
+    public void OpenEditor(int id) {
+        _navManager.NavigateTo("/list/" + id);
+    }
+
+    public async Task RemoveList(ToDoListData list) {
+        if (Lists is null) return;
+        await _sender.Send(new RemoveToDoList.Command(list.Id));
+        Lists.Remove(list);
+    }
+
+}

@@ -1,0 +1,152 @@
+﻿@page "/list/{ListId:int}"
+@using System.Diagnostics
+@using ToDoApp.Editor.Data
+@using ToDoApp.Editor.Queries
+@using ToDoApp.Editor.Commands
+@using System.Linq;
+@inject ISender _sender
+
+@if (Name is null) {
+    <p>Loading...</p>
+} else {
+    <input type="text" @bind=Name @bind:event="oninput" @onchange="UpdateName" />
+}
+
+@if (Saving) {
+    <small>saving...</small>
+}
+
+@if (ErrorMessage is not null) {
+    <small style="color:red;">@ErrorMessage</small>
+}
+
+@if (Items is null) {
+    <p>Loading...</p>
+} else {
+
+    <table width="300px">
+
+        @{
+            var notDone = Items.Where(i => !i.IsDone);
+            var done = Items.Where(i => i.IsDone);
+
+            foreach(var item in notDone) {
+                <tr>
+                    <td>
+                        <div @onclick="() => ToggleItem(item)" class="todo_item"> 
+                            <input type="checkbox" checked="@false" style="pointer-events: none;" />
+                            <span>@item.Name</span>
+                        </div>
+                    </td>
+                    <td>
+                        <a @onclick="() => RemoveItem(item)">x</a>
+                    </td>
+                </tr>
+            }
+
+            foreach(var item in done) {
+                <tr>
+                    <td>
+                        <div @onclick="() => ToggleItem(item)" class="todo_item todo_item_done"> 
+                            <input type="checkbox" checked="@true" style="pointer-events: none;" />
+                            <span>@item.Name</span>
+                        </div>
+                    </td>
+                    <td><a @onclick="() => RemoveItem(item)">x</a></td>
+                </tr>
+            }
+
+            
+        }
+
+    </table>
+
+    <div>
+        <input type="text" @bind=NewItemName @bind:event="oninput"/>
+        <button @onclick="AddItem">Add</button>
+    </div>
+}
+
+<style>
+
+    .todo_item {
+        padding: 10px;
+        font-weight: bold;
+    }
+
+    .todo_item_done {
+        text-decoration: line-through;
+        font-weight: normal;
+    }
+
+</style>
+
+@code {
+
+    [Parameter]
+    public int ListId { get; init; }
+
+    public ToDoListData? _list;
+
+    public bool Saving { get; private set; }
+
+    public string? ErrorMessage { get; private set; }
+
+    public string Name {
+        get => _list?.Name ?? "";
+        set {
+            if (_list is null) return;
+            _list.Name = value;
+        }
+    }
+
+    public List<ToDoListItemData>? Items { get; set; } = null;
+
+    public string? NewItemName { get; set; } = null;
+
+    protected override async Task OnInitializedAsync() {
+
+        _list = await _sender.Send(new GetToDoList.Query(ListId));
+        Items = _list.Items.ToList();
+
+    }
+
+    public async Task AddItem() {
+        if (NewItemName is null) return;
+        var newItem = await SendRequestAsync(new AddItemToList.Command(ListId, NewItemName));
+        if (Items is null) Items = new();
+        Items.Add(newItem);
+        NewItemName = null;
+    }
+
+    public async Task RemoveItem(ToDoListItemData item) {
+        if (Items is null) return;
+        await SendRequestAsync(new RemoveItemFromList.Command(item.Id));
+        Items.Remove(item);
+    }
+
+    public async Task ToggleItem(ToDoListItemData item) {
+        item.IsDone = await SendRequestAsync(new ToggleItem.Command(item));
+    }
+
+    public async Task UpdateName() {
+        if (_list is null) return;
+        await SendRequestAsync(new RenameList.Command(_list));
+    }
+
+    private async Task<T> SendRequestAsync<T>(IRequest<T> request) {
+        Saving = true;
+        T val;
+        try {
+            val = await _sender.Send(request);
+            ErrorMessage = null;
+        } catch (Exception e) {
+            Saving = false;
+            ErrorMessage = e.Message;
+            throw e;
+        }
+        Saving = false;
+        return val;
+    }
+
+}
