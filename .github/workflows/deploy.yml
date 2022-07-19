@@ -33,7 +33,7 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
       with:
         source: "."
-        target: "/app/src"
+        target: "~/app/src"
 
     - name: Building docker image
       uses: appleboy/ssh-action@master
