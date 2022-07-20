@@ -19,10 +19,10 @@ public class ToggleItem {
 
         public async Task<bool> Handle(Command request, CancellationToken cancellationToken) {
             
-            const string query = @"UPDATE ""ToDoListItems""
-                                    SET ""IsDone"" = NOT ""IsDone""
-                                    WHERE ""Id"" = @Id
-                                    RETURNING ""IsDone"";";
+            const string query = @"UPDATE toDoListItems
+                                    SET isDone = NOT isDone
+                                    WHERE id = @Id
+                                    RETURNING isDone;";
 
             var connection = _factory.CreateConnection();
 

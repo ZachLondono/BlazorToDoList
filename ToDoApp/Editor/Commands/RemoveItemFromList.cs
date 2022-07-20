@@ -18,7 +18,7 @@ public class RemoveItemFromList {
 
         protected override async Task Handle(Command request, CancellationToken cancellationToken) {
 
-            const string query = @"DELETE FROM ""ToDoListItems"" WHERE ""Id"" = @ItemId;";
+            const string query = @"DELETE FROM toDoListItems WHERE id = @ItemId;";
 
             var connection = _factory.CreateConnection();
 

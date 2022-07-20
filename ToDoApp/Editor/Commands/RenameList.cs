@@ -19,9 +19,9 @@ public class RenameList {
 
         protected override async Task Handle(Command request, CancellationToken cancellationToken) {
 
-            const string query = @"UPDATE ""ToDoLists""
-                                    SET ""Name"" = @Name
-                                    WHERE ""Id"" = @Id;";
+            const string query = @"UPDATE toDoLists
+                                    SET name = @Name
+                                    WHERE id = @Id;";
 
             var connection = _factory.CreateConnection();
 

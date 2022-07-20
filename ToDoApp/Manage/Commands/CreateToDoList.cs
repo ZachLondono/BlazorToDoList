@@ -19,7 +19,7 @@ public class CreateToDoList {
 
         public async Task<ToDoListData> Handle(Command request, CancellationToken cancellationToken) {
 
-            const string query = @"INSERT INTO ""ToDoLists"" (""Name"") VALUES (@Name) RETURNING ""Id"";";
+            const string query = @"INSERT INTO todolists (name) VALUES (@Name) RETURNING id;";
 
             var connection = _factory.CreateConnection();
 

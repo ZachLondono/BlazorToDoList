@@ -19,8 +19,8 @@ public class GetToDoList {
 
         public async Task<ToDoListData> Handle(Query request, CancellationToken cancellationToken) {
 
-            const string listQuery = @"SELECT ""Id"", ""Name"" FROM ""ToDoLists"" WHERE ""Id"" = @ListId;";
-            const string itemQuery = @"SELECT ""Id"", ""Name"", ""IsDone"" FROM ""ToDoListItems"" WHERE ""ToDoListId"" = @ListId;";
+            const string listQuery = @"SELECT id, name FROM toDoLists WHERE id = @ListId;";
+            const string itemQuery = @"SELECT id, name, isdone FROM toDoListItems WHERE toDoListId = @ListId;";
 
             var connection = _factory.CreateConnection();
 
